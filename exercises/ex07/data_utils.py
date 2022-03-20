@@ -4,7 +4,6 @@ __author__ = "730531052"
 
 
 from csv import DictReader
-import re
 
 
 def read_csv_rows(filename: str) -> list[dict[str, str]]:
@@ -22,8 +21,8 @@ def column_values(table: list[dict[str, str]], column: str) -> list[str]:
     """Produce a list[str] of all values in a single column."""
     result: list[str] = []
     for row in table:
-          item: str = row[column]
-          result.append(item)
+        item: str = row[column]
+        result.append(item)
     return result
 
 
@@ -43,12 +42,15 @@ def head(table: dict[str, list[str]], n: int) -> dict[str, list[str]]:
     result: dict[str, list[str]] = {}
 
     for key in table:
-        values: list[str] = []
-        i: int = 0
-        while i < n:
-            values.append(key[i])
-            i += 1
-        result[key] = values
+        if n > len(table[key]):
+            result[key] = table[key]
+        else:
+            i: int = 0
+            values: list[str] = []
+            while i < n:
+                values.append(table[key][i])
+                i += 1
+            result[key] = values
     
     return result
 
@@ -63,7 +65,8 @@ def select(table: dict[str, list[str]], column_name: list[str]) -> dict[str, lis
     return result
 
 
-def concat(table_1: dict[str, list[str]], table_2:dict[str, list[str]]) -> dict[str, list[str]]：
+def concat(table_1: dict[str, list[str]], table_2: dict[str, list[str]]) -> dict[str, list[str]]:
+    """Produce a new column-based table with two column-based tables combined."""
     result: dict[str, list[str]] = {}
     
     for key_1 in table_1:
@@ -71,7 +74,8 @@ def concat(table_1: dict[str, list[str]], table_2:dict[str, list[str]]) -> dict[
     
     for key_2 in table_2:
         if key_2 in result:
-            result[key_2].append(table_2[key_2])
+            for item in key_2:
+                result[key_2].append(item)
         else:
             result[key_2] = table_2[key_2]
     
@@ -79,12 +83,13 @@ def concat(table_1: dict[str, list[str]], table_2:dict[str, list[str]]) -> dict[
 
 
 def count(lst: list[str]) -> dict[str, int]:
+    """Produce a dictionary where each key is a unique value in the given list and each value associated is the number of times that value appeared in the input list."""
     d: dict[str, int] = {}
     
     for item in lst:
-        if item in lst:
+        if item in d:
             d[item] += 1
         else:
-            d[item] == 1
+            d[item] = 1
         
     return d
