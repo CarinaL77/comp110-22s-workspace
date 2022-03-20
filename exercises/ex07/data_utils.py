@@ -74,8 +74,9 @@ def concat(table_1: dict[str, list[str]], table_2: dict[str, list[str]]) -> dict
     
     for key_2 in table_2:
         if key_2 in result:
-            for item in key_2:
-                result[key_2].append(item)
+            for item in table_2[key_2]:
+                if item not in result[key_2]:
+                    result[key_2].append(item)
         else:
             result[key_2] = table_2[key_2]
     
